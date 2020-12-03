@@ -4,4 +4,5 @@ Trying to use a different language each day this year.
 
 # Language list
 Day 1 - F#
+
 Day 2 - Haskell
