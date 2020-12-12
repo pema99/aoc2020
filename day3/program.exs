@@ -4,15 +4,15 @@ defmodule Main do
 	    Enum.map(data, fn line -> Stream.drop(line, n) end)
 	end
 	
-	def drive_sled(data, y, {dx, dy}) do
+	def drive_sled(data, {dx, dy}) do
+        data = Enum.drop(data, dy)
 	    data = advance_right(data, dx)
-	    y = y + dy
-	    if y >= length(data) do 0
+	    if length(data) == 0 do 0
 	    else
-    	    line = Enum.at(data, y) |> Enum.take(7)
+    	    line = data |> Enum.at(0) |> Enum.at(0)
     	    case line do
-    	        [:tree|_] -> 1 + drive_sled(data, y, {dx, dy})
-    	        [:nothing|_] -> drive_sled(data, y, {dx, dy})
+    	        :tree -> 1 + drive_sled(data, {dx, dy})
+    	        :nothing -> drive_sled(data, {dx, dy})
     	    end
 	    end
 	end
@@ -44,13 +44,13 @@ defmodule Main do
         field = make_infinite(lines)
 
         # part 1
-        drive_sled(field, 0, {3, 1})
+        drive_sled(field, {3, 1})
         |> IO.inspect
 
         # part 2
         slopes = [{1, 1}, {3, 1}, {5, 1}, {7, 1}, {1, 2}]
         slopes
-        |> Enum.map(fn slope -> drive_sled(field, 0, slope) end)
+        |> Enum.map(fn slope -> drive_sled(field, slope) end)
         |> Enum.reduce(1, &*/2)
         |> IO.inspect
 	end
