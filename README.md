@@ -6,3 +6,5 @@ Trying to use a different language each day this year.
 Day 1 - F#
 
 Day 2 - Haskell
+
+Day 3 - Elixir
