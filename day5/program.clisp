@@ -1,0 +1,39 @@
+(defun calc-bsp (lst lo hi)
+    (if lst
+        (let ((next (+ (/ (- hi lo) 2) lo)))
+        (case (car lst)
+            (#\F (calc-bsp (cdr lst) lo (floor next)))
+            (#\B (calc-bsp (cdr lst) (ceiling next) hi))))
+        lo))
+
+(defun split-list (lst)
+    (cons (subseq lst 0 7) (subseq lst 7 10)))
+
+(defun map-chars (lst)
+    (mapcar #'(lambda (x) (case x (#\L #\F) (#\R #\B))) lst))
+
+(defun run-line (line)
+    (let ((pair (split-list (coerce line 'list))))
+    (let ((row (calc-bsp (car pair) 0 127))
+          (col (calc-bsp (map-chars (cdr pair)) 0 7))) 
+    (+ (* row 8) col) )))
+
+(defun missing (lst prev)
+    (if (eq (car lst) (+ prev 1))
+        (missing (cdr lst) (car lst)) 
+        (+ 1 prev)))
+
+(defvar data
+    (with-open-file (stream "input.txt")
+        (loop for line = (read-line stream nil)
+         while line
+         collect line)))
+
+; part 1
+(print (reduce #'max (mapcar #'run-line data)))
+
+; part 2
+(let ((sorted (sort (mapcar #'run-line data) #'<)))
+(print (missing sorted (- (car sorted) 1))))
+
+;ahem, fuck this language
